@@ -53,6 +53,6 @@ services:
     ports:
       - "80:80"
     volumes:
-      - C:/app/dockerData/nginx/conf.d:/etc/nginx/conf.d:ro
+      - C:/app/dockerData/nginx/conf.d:/etc/nginx/conf.d
       - C:/app/dockerData/nginx/logs:/var/log/nginx
-      - C:/app/dockerData/nginx/html:/usr/share/nginx/html:ro
+      - C:/app/dockerData/nginx/html:/usr/share/nginx/html
