@@ -3,10 +3,7 @@
     <el-header class="app-header">
       <div class="logo-area">
         <span class="logo-icon">⚡</span>
-        <span class="logo-title">HR 动态表单与通用接口引擎</span>
-        <el-tag type="info" size="small" effect="plain" class="tech-tag">
-          Go (im-auth-go架构) + PostgreSQL JSONB + Vue 3 TS
-        </el-tag>
+        <span class="logo-title">HR 动态表单系统</span>
       </div>
 
       <el-menu
@@ -18,23 +15,23 @@
       >
         <el-menu-item index="/fill">
           <el-icon><DocumentChecked /></el-icon>
-          在线填表 (渲染引擎)
+          在线填表
         </el-menu-item>
         <el-menu-item index="/builder">
           <el-icon><EditPen /></el-icon>
-          表单设计器 (Builder & 乐观锁)
+          表单设计
         </el-menu-item>
         <el-menu-item index="/submissions">
           <el-icon><DataAnalysis /></el-icon>
-          数据中心 (动态 JSON 筛选)
+          数据中心
         </el-menu-item>
         <el-menu-item index="/audit-logs">
           <el-icon><Timer /></el-icon>
-          审计日志 (Diff 变更追溯)
+          审计日志
         </el-menu-item>
         <el-menu-item index="/versions">
           <el-icon><Files /></el-icon>
-          版本生命周期 (Q2 演进)
+          版本管理
         </el-menu-item>
       </el-menu>
     </el-header>
@@ -44,12 +41,7 @@
     </el-main>
 
     <el-footer class="app-footer">
-      <div>HR 动态表单与通用接口引擎系统 · 生产级全栈方案</div>
-      <div class="footer-links">
-        <span>Go 1.27 + Gin + PostgreSQL (pgx/pq) JSONB + GIN 倒排索引</span>
-        <span> | </span>
-        <span>Vue 3 + TypeScript + Element Plus + DAG 拓扑防死循环</span>
-      </div>
+      <div>HR 动态表单与通用接口引擎系统</div>
     </el-footer>
   </el-container>
 </template>
@@ -95,17 +87,17 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 .logo-icon {
-  font-size: 22px;
+  font-size: 20px;
 }
 .logo-title {
   font-weight: 700;
   font-size: 16px;
   color: #0f172a;
-}
-.tech-tag {
-  margin-left: 8px;
+  white-space: nowrap;
 }
 .nav-menu {
   border-bottom: none !important;
@@ -117,13 +109,10 @@ body {
 }
 .app-footer {
   text-align: center;
-  font-size: 12px;
+  font-size: 13px;
   color: #94a3b8;
   padding: 16px;
   border-top: 1px solid #e2e8f0;
   background: #ffffff;
-}
-.footer-links {
-  margin-top: 4px;
 }
 </style>

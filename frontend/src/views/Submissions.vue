@@ -4,8 +4,8 @@
       <template #header>
         <div class="card-header">
           <div>
-            <h2 class="title">📊 HR 数据中心 (通用动态接口引擎)</h2>
-            <p class="subtitle">通用查询与动态 JSONB 字段筛选 (GET /api/v1/dynamic-data/:formId)</p>
+            <h2 class="title">数据中心</h2>
+            <p class="subtitle">动态表单数据查询与多维字段筛选</p>
           </div>
           <el-button type="primary" plain @click="fetchData">
             刷新列表
@@ -13,19 +13,18 @@
         </div>
       </template>
 
-      <!-- 动态字段筛选栏 (Q1 重点验证) -->
       <el-form :inline="true" class="filter-form">
-        <el-form-item label="工作年限 (年)">
+        <el-form-item label="工作年限">
           <el-select
             v-model="filters.experienceOp"
             placeholder="筛选条件"
-            style="width: 180px"
+            style="width: 160px"
             @change="handleFilterChange"
           >
             <el-option label="全部工作年限" value="" />
-            <el-option label="大于 3 年 (experience > 3)" value="gt:3" />
-            <el-option label="大于等于 5 年 (experience >= 5)" value="gte:5" />
-            <el-option label="应届/小于 2 年 (experience <= 1)" value="lte:1" />
+            <el-option label="大于 3 年" value="gt:3" />
+            <el-option label="大于等于 5 年" value="gte:5" />
+            <el-option label="应届 / 1 年以内" value="lte:1" />
           </el-select>
         </el-form-item>
 

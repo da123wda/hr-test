@@ -4,8 +4,8 @@
       <template #header>
         <div class="card-header">
           <div>
-            <h2 class="title">📜 Schema 生命周期与版本演进中心 (Version Lifecycle)</h2>
-            <p class="subtitle">历史版本归档不可变性、字段废弃归档与数据平滑迁移演示 (Q2)</p>
+            <h2 class="title">版本管理</h2>
+            <p class="subtitle">表单历史归档快照与版本演进记录</p>
           </div>
           <el-button type="primary" plain @click="fetchVersions">
             刷新版本列表
@@ -13,10 +13,9 @@
         </div>
       </template>
 
-      <!-- 需求场景说明卡片 -->
       <el-alert
-        title="Q2 经典业务场景解决方案"
-        type="success"
+        title="版本演进与历史数据兼容说明"
+        type="info"
         :closable="false"
         style="margin-bottom: 20px"
       >

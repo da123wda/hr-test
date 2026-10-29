@@ -4,8 +4,8 @@
       <template #header>
         <div class="card-header">
           <div>
-            <h2 class="title">📋 HR 敏感数据审计日志中心 (Audit Logs)</h2>
-            <p class="subtitle">记录敏感信息变更明细（例如 salary: 30000 -> 35000）与责任追溯 (Q6)</p>
+            <h2 class="title">审计日志</h2>
+            <p class="subtitle">敏感字段变更明细与操作追溯</p>
           </div>
           <el-button type="primary" plain @click="fetchLogs">
             刷新日志

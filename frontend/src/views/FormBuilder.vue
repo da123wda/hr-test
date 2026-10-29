@@ -4,38 +4,38 @@
       <template #header>
         <div class="builder-header">
           <div>
-            <h2 class="title">🛠️ HR 表单设计器 (Visual Form Builder)</h2>
-            <p class="subtitle">无需开发人员介入，配置个性化入职表单与动态接口引擎</p>
+            <h2 class="title">表单设计器</h2>
+            <p class="subtitle">配置入职表单与动态接口引擎字段规则</p>
           </div>
           <div class="header-actions">
             <el-tag type="warning" size="large" effect="dark">
-              当前编辑版本: v{{ schemaForm.version || 1 }} (ETag: {{ currentEtag || 'Init' }})
+              当前版本: v{{ schemaForm.version || 1 }}
             </el-tag>
             <el-button @click="simulateConcurrencyConflict" type="danger" plain>
-              ⚡ 模拟 Q5 并发保存冲突
+              模拟并发保存冲突
             </el-button>
             <el-button @click="saveDraft" :loading="saving" type="primary">
               保存草稿
             </el-button>
             <el-button @click="handlePublish" :loading="publishing" type="success">
-              发布新版本 (Q2)
+              发布新版本
             </el-button>
           </div>
         </div>
       </template>
 
-      <!-- 循环依赖死循环测试工具条 -->
+      <!-- 循环依赖测试工具条 -->
       <el-alert
-        title="循环依赖防御 (Q1 进阶测试)"
+        title="循环依赖防御检测"
         type="info"
         :closable="false"
         style="margin-bottom: 16px"
       >
         <template #default>
           <div style="display: flex; align-items: center; justify-content: space-between">
-            <span>点击可快速注入【A 修改 B，B 修改 C，C 又修改 A】死循环规则，测试系统的 DAG 环检测与拦截机制：</span>
+            <span>支持针对字段联动规则进行依赖环检测，阻断死循环依赖：</span>
             <el-button size="small" type="warning" @click="injectCycleRulesDemo">
-              注入 A->B->C->A 死循环规则
+              注入循环依赖测试规则
             </el-button>
           </div>
         </template>
