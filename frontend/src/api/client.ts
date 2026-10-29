@@ -25,14 +25,20 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => {
     const res = response.data
-    // 如果返回的是标准格式但 code !== 0，抛错
-    if (res && typeof res.code === 'number' && res.code !== 0) {
-      // 字段校验错误特殊处理
-      if (res.code === 40001 && res.errors) {
-        return Promise.reject({ isValidationError: true, errors: res.errors, message: res.message })
+    if (res && typeof res.code === 'number') {
+      // 成功状态码 (兼容 OkCode 1 与 0)
+      if (res.code === 1 || res.code === 0) {
+        return response
       }
-      ElMessage.error(res.message || '请求发生错误')
-      return Promise.reject(new Error(res.message || 'Error'))
+
+      const msg = res.msg || res.message || '请求处理异常'
+      // 字段级校验异常
+      if ((res.code === 10004 || res.code === 40001) && res.errors) {
+        return Promise.reject({ isValidationError: true, errors: res.errors, message: msg })
+      }
+
+      ElMessage.error(msg)
+      return Promise.reject(new Error(msg))
     }
     return response
   },
@@ -40,18 +46,18 @@ apiClient.interceptors.response.use(
     if (error.response) {
       const status = error.response.status
       const data = error.response.data
+      const msg = data?.msg || data?.message
 
-      // Q5 乐观锁并发冲突 409
       if (status === 409) {
-        ElMessage.error(data.message || '并发修改冲突：当前表单已被他人保存，版本不一致，请刷新后重试')
-        return Promise.reject({ isConflict: true, status: 409, message: data.message })
+        ElMessage.error(msg || '并发修改冲突：当前表单已被他人保存，版本不一致，请刷新后重试')
+        return Promise.reject({ isConflict: true, status: 409, message: msg })
       }
 
-      if (status === 400 && data.errors) {
-        return Promise.reject({ isValidationError: true, errors: data.errors, message: data.message })
+      if (status === 400 && data?.errors) {
+        return Promise.reject({ isValidationError: true, errors: data.errors, message: msg })
       }
 
-      ElMessage.error(data.message || `网络请求错误 [${status}]`)
+      ElMessage.error(msg || `网络请求错误 [${status}]`)
     } else {
       ElMessage.error(error.message || '网络连接失败，请检查服务状态')
     }
