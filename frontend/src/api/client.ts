@@ -3,7 +3,6 @@ import { ElMessage } from 'element-plus'
 
 const apiClient = axios.create({
   baseURL: 'http://95.40.3.250/api/v1',
-  timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
     'X-Operator-Id': 'HR_Admin_User',
