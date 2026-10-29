@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"hr-dynamic-form-engine/src/dto"
@@ -21,9 +22,17 @@ func SubmissionDbDefault() submissionDao {
 	return submissionDao{conn: DBDefault()}
 }
 
-// InsertOne 插入提交记录 (Q0)
+// InsertOne 插入提交记录
 func (d submissionDao) InsertOne(sub *model.FormSubmission) error {
-	_, err := d.conn.InsertOne(sub)
+	dataJSON, err := json.Marshal(sub.Data)
+	if err != nil {
+		return err
+	}
+	_, err = d.conn.Exec(
+		`INSERT INTO form_submission (id, form_id, schema_version, data, status, submitter_id, submitter_name, created_at, updated_at)
+		 VALUES (?, ?, ?, ?::jsonb, ?, ?, ?, NOW(), NOW())`,
+		sub.Id, sub.FormId, sub.SchemaVersion, string(dataJSON), sub.Status, sub.SubmitterId, sub.SubmitterName,
+	)
 	return err
 }
 
@@ -40,7 +49,7 @@ func (d submissionDao) GetById(formId, id string) (*model.FormSubmission, error)
 	return sub, nil
 }
 
-// UpdateData 更新数据并自动记录审计日志 Diff (Q6)
+// UpdateData 更新数据并自动记录审计日志
 func (d submissionDao) UpdateData(sub *model.FormSubmission, operatorId, operatorName, clientIp string) error {
 	oldSub, err := d.GetById(sub.FormId, sub.Id)
 	if err != nil {
@@ -55,12 +64,15 @@ func (d submissionDao) UpdateData(sub *model.FormSubmission, operatorId, operato
 		return err
 	}
 
-	_, err = session.Table("form_submission").
-		Where("form_id = ? AND id = ?", sub.FormId, sub.Id).
-		Update(map[string]interface{}{
-			"data":       sub.Data,
-			"updated_at": time.Now(),
-		})
+	dataJSON, err := json.Marshal(sub.Data)
+	if err != nil {
+		return err
+	}
+
+	_, err = session.Exec(
+		`UPDATE form_submission SET data = ?::jsonb, updated_at = NOW() WHERE form_id = ? AND id = ?`,
+		string(dataJSON), sub.FormId, sub.Id,
+	)
 	if err != nil {
 		_ = session.Rollback()
 		return err

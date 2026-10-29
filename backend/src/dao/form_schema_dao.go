@@ -1,10 +1,10 @@
 package dao
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"hr-dynamic-form-engine/src/model"
-	"time"
 
 	"xorm.io/xorm"
 )
@@ -53,11 +53,21 @@ func (d formSchemaDao) SaveSchema(schema *model.FormSchema, expectedVersion int)
 		return fmt.Errorf("%w (您的版本: v%d, 当前数据库版本: v%d)", ErrOptimisticLockConflict, expectedVersion, existing.Version)
 	}
 
+	fieldsJSON, err := json.Marshal(schema.Fields)
+	if err != nil {
+		return fmt.Errorf("序列化字段列表失败: %w", err)
+	}
+
+	migrationsJSON, _ := json.Marshal(schema.Migrations)
+	if schema.Migrations == nil {
+		migrationsJSON = []byte("{}")
+	}
+
 	res, err := d.conn.Exec(
 		`UPDATE form_schema 
-		 SET title = ?, description = ?, fields = ?, migrations = ?, version = version + 1, updated_at = NOW() 
+		 SET title = ?, description = ?, fields = ?::jsonb, migrations = ?::jsonb, version = version + 1, updated_at = NOW() 
 		 WHERE form_id = ? AND version = ?`,
-		schema.Title, schema.Description, schema.Fields, schema.Migrations, schema.FormId, existing.Version,
+		schema.Title, schema.Description, string(fieldsJSON), string(migrationsJSON), schema.FormId, existing.Version,
 	)
 	if err != nil {
 		return err
@@ -103,16 +113,10 @@ func (d formSchemaDao) PublishSchema(formId string, expectedVersion int, operato
 		return nil, ErrOptimisticLockConflict
 	}
 
-	snap := &model.FormSchemaVersion{
-		FormId:      formId,
-		Version:     newPublishedVer,
-		Title:       current.Title,
-		Description: current.Description,
-		Fields:      current.Fields,
-		PublishedAt: time.Now(),
-		PublishedBy: operator,
-	}
-	if _, err = session.InsertOne(snap); err != nil {
+	fieldsJSON, _ := json.Marshal(current.Fields)
+	snapSQL := `INSERT INTO form_schema_version (form_id, version, title, description, fields, published_at, published_by)
+	           VALUES (?, ?, ?, ?, ?::jsonb, NOW(), ?)`
+	if _, err = session.Exec(snapSQL, formId, newPublishedVer, current.Title, current.Description, string(fieldsJSON), operator); err != nil {
 		_ = session.Rollback()
 		return nil, err
 	}

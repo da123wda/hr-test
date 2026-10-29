@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"encoding/json"
 	"hr-dynamic-form-engine/src/dto"
 	"hr-dynamic-form-engine/src/model"
 
@@ -16,7 +17,15 @@ func AuditDbDefault() auditDao {
 }
 
 func (d auditDao) InsertOne(log *model.AuditLog) error {
-	_, err := d.conn.InsertOne(log)
+	diffJSON, err := json.Marshal(log.Diff)
+	if err != nil || log.Diff == nil {
+		diffJSON = []byte("{}")
+	}
+	_, err = d.conn.Exec(
+		`INSERT INTO audit_log (action, target_type, target_id, form_id, operator_id, operator_name, client_ip, diff, created_at)
+		 VALUES (?, ?, ?, ?, ?, ?, ?, ?::jsonb, NOW())`,
+		log.Action, log.TargetType, log.TargetId, log.FormId, log.OperatorId, log.OperatorName, log.ClientIp, string(diffJSON),
+	)
 	return err
 }
 
