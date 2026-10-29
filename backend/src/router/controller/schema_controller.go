@@ -19,7 +19,25 @@ func (SchemaController) Get(ctx *gin.Context) {
 	if formId == "" {
 		cbase.PanicMsg("formId 不能为空")
 	}
-	resp := service.SchemaServer{}.GetService(formId)
+
+	mode := ctx.Query("mode")
+	var resp *dto.SchemaResp
+	if mode == "draft" {
+		resp = service.SchemaServer{}.GetDraftService(formId)
+	} else {
+		resp = service.SchemaServer{}.GetService(formId)
+	}
+
+	ctx.Header("ETag", resp.Etag)
+	ctx.JSON(Ok(resp))
+}
+
+func (SchemaController) GetDraft(ctx *gin.Context) {
+	formId := ctx.Param("formId")
+	if formId == "" {
+		cbase.PanicMsg("formId 不能为空")
+	}
+	resp := service.SchemaServer{}.GetDraftService(formId)
 	ctx.Header("ETag", resp.Etag)
 	ctx.JSON(Ok(resp))
 }

@@ -27,6 +27,13 @@ func (s DynamicServer) SubmitService(ctx *gin.Context, formId string, args *dto.
 		cbase.PanicMsg("该表单尚未发布，暂不可提交数据")
 	}
 
+	// 提取当前正式发布的版本快照，严格基于已发布版本进行校验
+	snap, err := dao.FormSchemaDbDefault().GetVersion(formId, schema.PublishedVersion)
+	if err == nil && snap != nil {
+		schema.Fields = snap.Fields
+		schema.Title = snap.Title
+	}
+
 	validator := engine.NewFormValidator()
 	valRes := validator.Validate(schema, args.Data)
 	if !valRes.IsValid {

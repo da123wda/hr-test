@@ -2,8 +2,15 @@ import apiClient from './client'
 import type { FormSchema, FormSchemaVersion, FormSubmission, AuditLog } from '@/types/schema'
 
 // 1. Schema 相关
+// 获取对外发布的正式版本定义 (面向候选人填表)
 export const getSchema = async (formId: string) => {
   const res = await apiClient.get<{ code: number; data: FormSchema }>(`/schemas/${formId}`)
+  return res.data.data
+}
+
+// 获取 HR 工作台草稿 (面向表单设计器)
+export const getDraftSchema = async (formId: string) => {
+  const res = await apiClient.get<{ code: number; data: FormSchema }>(`/schemas/${formId}/draft`)
   return res.data.data
 }
 

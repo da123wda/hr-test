@@ -16,7 +16,34 @@ type SchemaServer struct {
 	OperatorId string
 }
 
+// GetService 获取对外发布的正式表单定义 (面向线上填表用户)
 func (s SchemaServer) GetService(formId string) *dto.SchemaResp {
+	schema, err := dao.FormSchemaDbDefault().GetByFormId(formId)
+	if err != nil {
+		cbase.PanicMsg(fmt.Sprintf("未找到表单 [%s] 的定义", formId))
+	}
+
+	if schema.PublishedVersion == 0 {
+		cbase.PanicMsg(fmt.Sprintf("表单 [%s] 尚未发布，暂不可用", formId))
+	}
+
+	// 读取当前发布的正式版本快照，隔离 HR 未发布的草稿改动
+	snap, err := dao.FormSchemaDbDefault().GetVersion(formId, schema.PublishedVersion)
+	if err == nil && snap != nil {
+		schema.Fields = snap.Fields
+		schema.Title = snap.Title
+		schema.Description = snap.Description
+	}
+
+	etag := fmt.Sprintf(`W/"%s-v%d"`, schema.FormId, schema.PublishedVersion)
+	return &dto.SchemaResp{
+		FormSchema: *schema,
+		Etag:       etag,
+	}
+}
+
+// GetDraftService 获取工作台编辑草稿 (面向 HR 设计器)
+func (s SchemaServer) GetDraftService(formId string) *dto.SchemaResp {
 	schema, err := dao.FormSchemaDbDefault().GetByFormId(formId)
 	if err != nil {
 		cbase.PanicMsg(fmt.Sprintf("未找到表单 [%s] 的定义", formId))

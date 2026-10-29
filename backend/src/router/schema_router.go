@@ -13,6 +13,7 @@ func schemaRouter(group *gin.RouterGroup) {
 		schemaGroup.GET("", schemaCtrl.ListAll)
 		schemaGroup.POST("", schemaCtrl.Save)
 		schemaGroup.GET(":formId", schemaCtrl.Get)
+		schemaGroup.GET(":formId/draft", schemaCtrl.GetDraft)
 		schemaGroup.POST(":formId/publish", schemaCtrl.Publish)
 		schemaGroup.GET(":formId/versions", schemaCtrl.ListVersions)
 		schemaGroup.GET(":formId/versions/:version", schemaCtrl.GetVersion)

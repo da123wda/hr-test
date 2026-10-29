@@ -189,7 +189,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { getSchema, saveSchema, publishSchema } from '@/api'
+import { getDraftSchema, saveSchema, publishSchema } from '@/api'
 import type { FormSchema, FieldDefinition } from '@/types/schema'
 
 const saving = ref(false)
@@ -209,7 +209,7 @@ const schemaForm = reactive<FormSchema>({
 
 const loadSchema = async () => {
   try {
-    const data = await getSchema(schemaForm.formId)
+    const data = await getDraftSchema(schemaForm.formId)
     Object.assign(schemaForm, data)
     currentEtag.value = `W/"${data.formId}-v${data.version}"`
   } catch (err: any) {
