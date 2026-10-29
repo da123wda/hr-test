@@ -84,10 +84,6 @@
 │   ├── conf.d/
 │   │   └── default.conf          # Nginx 反向代理配置
 │   └── logs/                     # Nginx 日志挂载目录
-├── data/
-│   ├── postgres/                 # PostgreSQL 数据卷挂载目录
-│   ├── redis/                    # Redis 数据卷挂载目录
-│   └── uploads/                  # 业务文件上传持久化目录
 └── docker-compose.yml            # Docker 容器编排
 ```
 

@@ -12,13 +12,8 @@ node_modules/
 .pnp
 .pnp.js
 
-# Data Volumes & Logs
-data/postgres/*
-!data/postgres/.gitkeep
-data/redis/*
-!data/redis/.gitkeep
-data/uploads/*
-!data/uploads/.gitkeep
+# Data Volumes & Runtime
+data/
 nginx/logs/*
 !nginx/logs/.gitkeep
 
