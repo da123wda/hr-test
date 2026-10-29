@@ -99,6 +99,10 @@ func Init() {
 	}
 	Cfg.UploadDir = Cfg.Server.UploadDir
 
+	if redisHost := os.Getenv("REDIS_HOST"); redisHost != "" {
+		Cfg.Redis.Host = redisHost
+	}
+
 	if env := os.Getenv("APP_ENV"); env != "" {
 		Cfg.Env = env
 	} else if len(os.Args) > 1 {
