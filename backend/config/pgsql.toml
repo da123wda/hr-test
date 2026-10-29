@@ -1,0 +1,10 @@
+[pgsql]
+host = "127.0.0.1"
+port = 5432
+username = "postgres"
+password = "password123"
+database = "hr_forms"
+schema = "public"
+sslmode = "disable"
+max_conn = 100
+idle_conn = 20
