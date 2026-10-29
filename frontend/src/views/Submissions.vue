@@ -327,7 +327,8 @@ const handleDelete = async (row: FormSubmission) => {
 }
 
 const previewFile = (url: string) => {
-  window.open(url, '_blank')
+  const fullUrl = url.startsWith('http') ? url : `http://95.40.3.250${url}`
+  window.open(fullUrl, '_blank')
 }
 
 const formatDept = (d?: string) => {

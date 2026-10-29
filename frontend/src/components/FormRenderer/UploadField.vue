@@ -102,7 +102,9 @@ const handleRemove = () => {
 
 const handleDownload = () => {
   if (fileMeta.value?.downloadUrl) {
-    window.open(fileMeta.value.downloadUrl, '_blank')
+    const rawUrl = fileMeta.value.downloadUrl
+    const url = rawUrl.startsWith('http') ? rawUrl : `http://95.40.3.250${rawUrl}`
+    window.open(url, '_blank')
   }
 }
 
