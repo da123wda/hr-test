@@ -3,7 +3,7 @@ port = "8080"
 upload_dir = "./data/uploads"
 
 [pgsql]
-host = "127.0.0.1"
+host = "postgres"
 port = 5432
 username = "postgres"
 password = "password123"
@@ -14,7 +14,7 @@ max_conn = 100
 idle_conn = 20
 
 [redis]
-host = "127.0.0.1:6379"
+host = "redis:6379"
 password = ""
 database = 0
 max_conn = 100

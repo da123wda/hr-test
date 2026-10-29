@@ -1,5 +1,5 @@
 [redis]
-host = "127.0.0.1:6379"
+host = "redis:6379"
 password = ""
 database = 0
 max_conn = 100

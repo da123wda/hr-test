@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"hr-dynamic-form-engine/src/cfg"
 	"hr-dynamic-form-engine/src/log"
+	"os"
 	"time"
 
 	"github.com/gomodule/redigo/redis"
@@ -13,6 +14,9 @@ var defaultPool *redis.Pool
 
 func Init() {
 	rc := cfg.Cfg.Redis
+	if envHost := os.Getenv("REDIS_HOST"); envHost != "" {
+		rc.Host = envHost
+	}
 	if rc.Host == "" {
 		rc.Host = "127.0.0.1:6379"
 	}
