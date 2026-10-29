@@ -12,7 +12,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./dockerData/postgres:/var/lib/postgresql/data
+      - /home/ubuntu/hr_test/dockerData/postgres:/var/lib/postgresql/data
 
   redis:
     image: redis:7-alpine
@@ -21,7 +21,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ./dockerData/redis:/data
+      - /home/ubuntu/hr_test/dockerData/redis:/data
 
   backend:
     image: hr-backend:latest
@@ -36,8 +36,8 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./dockerData/config:/app/config:ro
-      - ./dockerData/uploads:/app/data/uploads
+      - /home/ubuntu/hr_test/dockerData/config:/app/config:ro
+      - /home/ubuntu/hr_test/dockerData/uploads:/app/data/uploads
 
   nginx:
     image: nginx:alpine
@@ -48,6 +48,6 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./dockerData/nginx/conf.d:/etc/nginx/conf.d
-      - ./dockerData/nginx/logs:/var/log/nginx
-      - ./dockerData/nginx/html:/usr/share/nginx/html:ro
+      - /home/ubuntu/hr_test/dockerData/nginx/conf.d:/etc/nginx/conf.d
+      - /home/ubuntu/hr_test/dockerData/nginx/logs:/var/log/nginx
+      - /home/ubuntu/hr_test/dockerData/nginx/html:/usr/share/nginx/html:ro
