@@ -117,13 +117,14 @@ docker compose up -d
 ```
 
 ### 4.3 挂载持久化说明
-- **Nginx 配置挂载**：`./nginx/conf.d/default.conf` $\to$ `/etc/nginx/conf.d/default.conf`
-- **Nginx 日志目录挂载**：`./nginx/logs` $\to$ `/var/log/nginx`
-- **PostgreSQL 数据卷挂载**：`./data/postgres` $\to$ `/var/lib/postgresql/data`
-- **Redis 数据卷挂载**：`./data/redis` $\to$ `/data`
-- **后端配置挂载**：`./backend/config` $\to$ `/app/config`
-- **上传文件目录挂载**：`./data/uploads` $\to$ `/app/data/uploads`
-- **前端静态资源挂载**：`./frontend/dist` $\to$ `/usr/share/nginx/html`
+在服务器项目根目录 (`~/hr_test`) 下执行 `docker compose up -d` 时，所有数据卷与配置统一持久化在 `~/hr_test/dockerData` 目录下：
+- **PostgreSQL 数据卷挂载**：`./dockerData/postgres` $\to$ `/var/lib/postgresql/data`
+- **Redis 数据卷挂载**：`./dockerData/redis` $\to$ `/data`
+- **后端配置挂载**：`./dockerData/config` $\to$ `/app/config:ro`
+- **上传文件目录挂载**：`./dockerData/uploads` $\to$ `/app/data/uploads`
+- **Nginx 配置文件挂载**：`./dockerData/nginx/conf.d` $\to$ `/etc/nginx/conf.d`
+- **Nginx 日志目录挂载**：`./dockerData/nginx/logs` $\to$ `/var/log/nginx`
+- **前端静态资源挂载**：`./dockerData/nginx/html` $\to$ `/usr/share/nginx/html:ro`
 
 ---
 

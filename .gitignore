@@ -14,6 +14,7 @@ node_modules/
 
 # Data Volumes & Runtime
 data/
+dockerData/
 nginx/logs/*
 !nginx/logs/.gitkeep
 
